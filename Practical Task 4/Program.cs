@@ -21,12 +21,60 @@ namespace Practical_Task_4 {
                     -> {2, 1}
         */
         public static double[] SystemSolve(double[,] S) {
-            /* Replace this with your code */
+            
+            
+
             return new double[] { };
+        }
+
+        // Swaps rows of the matrix in given reference
+        public static void SwapRow(double[,] S, int target, int destination){
+            // guard clause
+            if (target > S.GetLength(0) || destination > S.GetLength(0) || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
+
+            int width = S.GetLength(1);
+            double[] tmp = new double[width];
+
+            // copy destination row to tmp
+            for (int i = 0; i < width; i++) {
+                tmp[i] = S[destination, i]; // evacuate destination row
+                S[destination, i] = S[target, i]; // write target row
+                S[target, i] = tmp[i]; // save destination row
+            }
+        }
+
+        // Prints the matrix to the console
+        public static void PrintMatrix(double[,] S){
+            for (int i = 0; i < S.GetLength(0); i++){
+                for (int j = 0; j < S.GetLength(1); j++){
+                    Console.Write($"{S[i, j]} ");
+                }
+                Console.WriteLine();
+            }
         }
 
         public static void Main(string[] args) {
             /* Feel free to use this method to test your solution. */
+
+            // height = Getlength(0)
+            // width = Getlength(1)
+
+            double[,] augmentedMatrix = new double[,] {
+                { 0, 4, 2, -2 },
+                { -2, 3, 1, -7 },
+                { 4, 5, 2, 4 }
+            };
+
+            PrintMatrix(augmentedMatrix);
+            Console.WriteLine();
+            SwapRow(augmentedMatrix, 0, 2);
+            PrintMatrix(augmentedMatrix);
+
+            SystemSolve(augmentedMatrix);
+
+
+            // HOLD THE LINE (CMD prompt) !!!
+            Console.ReadKey();
         }
     }
 }
