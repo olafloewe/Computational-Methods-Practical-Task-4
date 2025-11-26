@@ -74,16 +74,19 @@ namespace Practical_Task_4 {
                 SystemSolve({{1, 3, 5}, {3, -2, 4}, {4, -1, 9}, {7, -3, 13}})
                     -> {2, 1}
         */
-        public static double[] SystemSolve(double[,] S){
+        public static double[,] SystemSolve(double[,] S){
+            int height = S.GetLength(0);
+            int width = S.GetLength(1);
 
+            // fewer equations than variables => infinitely many solutions
+            if (width + 1 < height) return new double[0,0];
 
-
-            return new double[] { };
+            return new double[,] { };
         }
 
         public static void Main(string[] args) {
-            // height = Getlength(0)
-            // width = Getlength(1)
+            // height = GetLength(0)
+            // width = GetLength(1)
 
             double[,] augmentedMatrix = new double[,] {
                 { 0, 4, 2, -2 },
