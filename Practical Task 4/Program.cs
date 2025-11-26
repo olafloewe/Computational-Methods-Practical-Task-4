@@ -7,22 +7,6 @@ using System.Threading.Tasks;
 namespace Practical_Task_4 {
     internal class Program {
 
-        // Swaps rows of a matrix in memory reference
-        public static void SwapRow(double[,] S, int target, int destination){
-            // guard clause
-            if (target > S.GetLength(0) || destination > S.GetLength(0) || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
-
-            int width = S.GetLength(1);
-            double[] tmp = new double[width];
-
-            // copy destination row to tmp
-            for (int i = 0; i < width; i++) {
-                tmp[i] = S[destination, i]; // evacuate destination row
-                S[destination, i] = S[target, i]; // write target row
-                S[target, i] = tmp[i]; // save destination row
-            }
-        }
-
         // Prints the matrix to the console
         public static void PrintMatrix(double[,] S){
             for (int i = 0; i < S.GetLength(0); i++){
@@ -33,17 +17,46 @@ namespace Practical_Task_4 {
             }
         }
 
-        // Scales row of a matrix in given reference
-        public static void ScaleRow(double[,] S, int target, double scale){
+        // Swaps rows of a matrix in memory reference
+        public static void SwapRow(double[,] S, int target, int destination){
+            // guard clause
+            if (target > S.GetLength(0) || destination > S.GetLength(0) || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
+
+            int width = S.GetLength(1);
+            double[] tmp = new double[width];
+
+            // swap rows
+            for (int i = 0; i < width; i++) {
+                tmp[i] = S[destination, i]; // evacuate destination row
+                S[destination, i] = S[target, i]; // write target row
+                S[target, i] = tmp[i]; // save destination row
+            }
+        }
+
+        // Scales row of a matrix in memory reference
+        public static void ScaleRow(double[,] S, int target, double factor){
             // guard clause
             if (target > S.GetLength(0) || target < 0 ) throw new IndexOutOfRangeException("Row index out of range.");
-            if(scale == double.NaN || double.IsInfinity(scale)) throw new ArgumentException("Scale must be a valid number.");
+            if(factor == double.NaN || double.IsInfinity(factor)) throw new ArgumentException("Scale must be a valid number.");
 
             int width = S.GetLength(1);
 
-            // copy destination row to tmp
+            // scale row by a factor
             for (int i = 0; i < width; i++){
-                S[target, i] = S[target, i] * scale; // scaled element
+                S[target, i] = S[target, i] * factor; // scaled element
+            }
+        }
+
+        // Adds two rows of a matrix in memory reference
+        public static void AddRow(double[,] S, int target, int addition){
+            // guard clause
+            if (target > S.GetLength(0) || addition > S.GetLength(0) || target < 0 || addition < 0) throw new IndexOutOfRangeException("Row index out of range.");
+            
+            int width = S.GetLength(1);
+
+            // add rows
+            for (int i = 0; i < width; i++){
+                S[target, i] += S[addition,i]; // add element
             }
         }
 
@@ -78,13 +91,24 @@ namespace Practical_Task_4 {
                 { 4, 5, 2, 4 }
             };
 
+            Console.WriteLine("Matrix");
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
+
+            Console.WriteLine("Swap");
             SwapRow(augmentedMatrix, 0, 2);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
-            ScaleRow(augmentedMatrix, 0, -2.3345);
+
+            Console.WriteLine("Scale");
+            ScaleRow(augmentedMatrix, 0, 2);
             PrintMatrix(augmentedMatrix);
+            Console.WriteLine();
+
+            Console.WriteLine("Add");
+            AddRow(augmentedMatrix, 2, 0);
+            PrintMatrix(augmentedMatrix);
+            Console.WriteLine();
 
             SystemSolve(augmentedMatrix);
 
