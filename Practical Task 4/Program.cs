@@ -60,6 +60,16 @@ namespace Practical_Task_4 {
             }
         }
 
+        // sorts the matrix into row echelon form
+        public static void RowEchelonForm(double[,] S){
+            int row = 0;
+            int index = 1;
+            do {
+                while (S[row, row] == 0) SwapRows(S, row, index++);
+                row++;
+            } while (row < S.GetLength(0));
+        }
+
         /*
         public static double[] SystemSolve(double[,] S) {
             Input:
@@ -81,7 +91,31 @@ namespace Practical_Task_4 {
             // fewer equations than variables => infinitely many solutions
             if (width + 1 < height) return new double[0,0];
 
-            return new double[,] { };
+            int limit = width - 1; // last column is constants
+            int row = 0;
+
+            do{
+                // row echelon form
+                if (S[row,row] == 0) RowEchelonForm(S);
+
+                // scale to 1
+                ScaleRow(S, row, 1 / S[row, row]);
+                
+                // eliminate below and above
+                for(int i = 0; i < height; i++){
+                    if (S[row, i] == 0) continue; // no need to eliminate
+                    ScaleRow(S, row, -S[row, i]); // scale to negative coefficient
+                    AddRows(S, row, i); // add to eliminate
+                }
+
+                row++;
+            } while (row < height);
+
+            // TODO ONE SOLUTION
+
+            // TODO NO SOLUTION
+
+            return S;
         }
 
         public static void Main(string[] args) {
@@ -97,23 +131,25 @@ namespace Practical_Task_4 {
             Console.WriteLine("Matrix");
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
-
+            /*
             Console.WriteLine("Swap");
             SwapRows(augmentedMatrix, 0, 2);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
-
+            */
             Console.WriteLine("Scale");
             ScaleRow(augmentedMatrix, 0, 2);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
-
+            /*
             Console.WriteLine("Add");
             AddRows(augmentedMatrix, 2, 0);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
-
+            */
             SystemSolve(augmentedMatrix);
+            PrintMatrix(SystemSolve(augmentedMatrix));
+            Console.WriteLine();
 
             // HOLD THE LINE (CMD prompt) !!!
             Console.ReadKey();
