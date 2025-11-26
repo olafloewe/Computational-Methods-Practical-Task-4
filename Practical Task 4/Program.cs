@@ -18,7 +18,7 @@ namespace Practical_Task_4 {
         }
 
         // Swaps rows of a matrix in memory reference
-        public static void SwapRow(double[,] S, int target, int destination){
+        public static void SwapRows(double[,] S, int target, int destination){
             // guard clause
             if (target > S.GetLength(0) || destination > S.GetLength(0) || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
 
@@ -43,12 +43,12 @@ namespace Practical_Task_4 {
 
             // scale row by a factor
             for (int i = 0; i < width; i++){
-                S[target, i] = S[target, i] * factor; // scaled element
+                S[target, i] *= factor; // scaled element
             }
         }
 
         // Adds two rows of a matrix in memory reference
-        public static void AddRow(double[,] S, int target, int addition){
+        public static void AddRows(double[,] S, int target, int addition){
             // guard clause
             if (target > S.GetLength(0) || addition > S.GetLength(0) || target < 0 || addition < 0) throw new IndexOutOfRangeException("Row index out of range.");
             
@@ -96,7 +96,7 @@ namespace Practical_Task_4 {
             Console.WriteLine();
 
             Console.WriteLine("Swap");
-            SwapRow(augmentedMatrix, 0, 2);
+            SwapRows(augmentedMatrix, 0, 2);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
 
@@ -106,7 +106,7 @@ namespace Practical_Task_4 {
             Console.WriteLine();
 
             Console.WriteLine("Add");
-            AddRow(augmentedMatrix, 2, 0);
+            AddRows(augmentedMatrix, 2, 0);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
 
