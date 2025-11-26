@@ -43,7 +43,7 @@ namespace Practical_Task_4 {
 
             // scale row by a factor
             for (int i = 0; i < width; i++){
-                S[target, i] *= factor; // scaled element
+                S[target, i] *= (double)factor; // scaled element
             }
         }
 
@@ -98,18 +98,30 @@ namespace Practical_Task_4 {
                 // row echelon form
                 if (S[row,row] == 0) RowEchelonForm(S);
 
+                Console.WriteLine($"Pre {row}:");
+                PrintMatrix(S);
+
                 // scale to 1
-                ScaleRow(S, row, 1 / S[row, row]);
+                // ScaleRow(S, row, 1 / S[row, row]);
                 
                 // eliminate below and above
-                for(int i = 0; i < height; i++){
-                    if (S[row, i] == 0) continue; // no need to eliminate
-                    ScaleRow(S, row, -S[row, i]); // scale to negative coefficient
-                    AddRows(S, row, i); // add to eliminate
+                for(int i = 0; i < limit; i++){
+                    if (S[row, i] == 0 || i == row) continue; // no need to eliminate
+                    ScaleRow(S, row, S[row, i]); // scale to negative coefficient
+
+                    ScaleRow(S, row, -1); // scale to negative coefficient
+                    AddRows(S, i, row); // add to eliminate
+
+                    ScaleRow(S, row, -1); // scale to negative coefficient
+                    ScaleRow(S, row, (double)1 / S[row, i]); // scale back
                 }
 
+                Console.WriteLine($"Post {row}:");
+                PrintMatrix(S);
+                Console.WriteLine();
+
                 row++;
-            } while (row < height);
+            } while (row < limit);
 
             // TODO ONE SOLUTION
 
@@ -123,9 +135,9 @@ namespace Practical_Task_4 {
             // width = GetLength(1)
 
             double[,] augmentedMatrix = new double[,] {
-                { 0, 4, 2, -2 },
-                { -2, 3, 1, -7 },
-                { 4, 5, 2, 4 }
+                { 1, 1, 1, 6 },
+                { 2, -1, 1, 3 },
+                { 1, 2, -1, 2 }
             };
 
             Console.WriteLine("Matrix");
@@ -142,15 +154,22 @@ namespace Practical_Task_4 {
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
             /*
+            Console.WriteLine("Scale Back");
+            ScaleRow(augmentedMatrix, 0, (double)1/2);
+            PrintMatrix(augmentedMatrix);
+            Console.WriteLine();
+            */
+            /*
             Console.WriteLine("Add");
             AddRows(augmentedMatrix, 2, 0);
             PrintMatrix(augmentedMatrix);
             Console.WriteLine();
             */
-            SystemSolve(augmentedMatrix);
+            
+            // SystemSolve(augmentedMatrix);
             PrintMatrix(SystemSolve(augmentedMatrix));
             Console.WriteLine();
-
+            
             // HOLD THE LINE (CMD prompt) !!!
             Console.ReadKey();
         }
