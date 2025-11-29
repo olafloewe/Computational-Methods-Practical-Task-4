@@ -73,11 +73,53 @@ namespace Practical_Task_4{
         // sorts the matrix into row echelon form
         public static void RowEchelonForm(double[,] S){
             // int row = 0;
+            int height = S.GetLength(0);
             int index = 1;
-            for (int row = 0; row < S.GetLength(0); row++){
-                while (S[row, row] == 0) SwapRows(S, row, index++);
-                row++;
+            for (int row = 0; row < height; row++){
+
+                while (S[row, row] == 0 && index < height) {
+                    Console.WriteLine($"Swapping row {row} with row {index} to avoid zero pivot.");
+                    SwapRows(S, row, index);
+                    index++;
+                }
+                // row++;
             }
+        }
+
+        // counts the number of zero rows in a matrix
+        public static int ZeroRows(double[,] S){
+            int height = S.GetLength(0);
+            int width = S.GetLength(1); 
+            int found = 0;
+
+            for (int i = 0; i < height; i++) {
+                bool allZero = true; // reset after each row
+                for (int j = 0; j < width - 1; j++) {
+                    // negative check => element found
+                    if (S[i, j] != 0) {
+                        allZero = false;
+                        break;
+                    }
+                }
+                if (allZero) found++;
+            }
+            return found;
+        }
+
+        // checks for inconsistent rows in a matrix
+        public static bool ConsistentRows(double[,] S){
+            int height = S.GetLength(0);
+            int width = S.GetLength(1);
+            bool allZero = true;
+
+            for (int i = 0; i < height; i++){
+                allZero = true;
+                for (int j = 0; j < width - 1; j++){
+                    if(S[i,j] != 0) allZero = false; // non zero element found
+                }
+                if (S[i, width - 1] != 0 && allZero) return false; // all elements zero but constant non zero
+            }
+            return true;
         }
 
         /*
@@ -97,13 +139,9 @@ namespace Practical_Task_4{
         public static double[] SystemSolve(double[,] S){
             int height = S.GetLength(0);
             int width = S.GetLength(1);
-
-            // fewer equations than variables => infinitely many solutions
-            if (width > height + 1) return new double[0];
             int row = 0;
 
-            do{
-                if (row == width - 1) return new double[0]; // no solution
+            while (row < height && row < width - 1){
                 // row echelon form
                 if (S[row, row] == 0) RowEchelonForm(S);
 
@@ -115,10 +153,10 @@ namespace Practical_Task_4{
                     ScaleRow(S, row, 1 / S[row, row]); // scale to one
                 }
                 catch (Exception e){
+                    Console.WriteLine(e.Message);
                     return new double[0]; // no solution
                 }
 
-                // ScaleRow(S, row, -1); // scale to negative coefficient
                 for (int i = 0; i < height; i++){
                     if (i == row) continue; // dont eliminate self
                     if (S[i, row] == 0) continue; // skip zero coefficients
@@ -129,28 +167,40 @@ namespace Practical_Task_4{
                     for (int j = 0; j < width; j++){
                         tmpRow[j] = S[row, j] * -S[i, row]; // copy and scale row
                     }
+
                     try{ 
                         AddRows(S, i, tmpRow); // eliminate above / below
                     }
                     catch (Exception e){
+                        Console.WriteLine(e.Message);
                         return new double[0]; // no solution
                     }
-                    
 
                     Console.WriteLine($"Post {row}:");
                     PrintMatrix(S);
                     Console.WriteLine();
                 }
-
                 row++;
-            } while (row < height);
-
-            double[] solution = new double[height];
-
-            for (int i = 0; i < height; i++){
-                solution[i] = S[i, width - 1]; // constant column
             }
 
+            // number of linearly independent rows < number of variables => infinitely many solutions
+            if (height - ZeroRows(S) < width - 1){
+                Console.WriteLine("Infinitely many solutions detected.");
+                return new double[] { };
+            }
+
+            // inconsistency check
+            if (!ConsistentRows(S)){
+                Console.WriteLine("Inconsistency detected.");
+                PrintMatrix(S);
+                return new double[] { };
+            }
+
+            double[] solution = new double[height - ZeroRows(S)];
+
+            for (int i = 0; i < height - ZeroRows(S); i++){
+                solution[i] = S[i, width - 1]; // constant column
+            }
 
             Console.WriteLine("Solved Matrix: ");
             PrintMatrix(S); // debug print
@@ -163,17 +213,18 @@ namespace Practical_Task_4{
             Console.Write("Solution:\n{ ");
             for (int i = 0; i < solution.Length; i++)
             {
-                Console.Write($"x{i}={solution[i]}, ");
+                Console.Write($"x{i+1}={solution[i]}, ");
             }
             Console.WriteLine("}");
         }
 
         public static void Main(string[] args){
-            double[,] augmentedMatrix = new double[,]{
-                {1, 3, 5}, 
-                {3, -2, 4}, 
-                {4, 1, 9}, 
-                {7, -3, 11}
+            double[,] augmentedMatrix = new double[,] {
+                { 2,  3, -1, 2,  7  },
+                { 5, -2,  3, 1, 34 },
+                { 4,  1,  2, -1, 27 },
+                { 1, -3,  4,  2, 36 },
+                { 6,  2,  1, -1,  3}
             };
 
             Console.WriteLine("Matrix: ");
