@@ -106,7 +106,7 @@ namespace Practical_Task_4 {
                 // row echelon form
                 if (S[row,row] == 0) RowEchelonForm(S);
 
-                try {
+                try { // TODO try 0
                     ScaleRow(S, row, 1 / S[row, row]); // scale to one
                 }
                 catch (Exception e){
@@ -118,8 +118,8 @@ namespace Practical_Task_4 {
                     if (i == row) continue; // dont eliminate self
                     if (S[i, row] == 0) continue; // skip zero coefficients
 
-                    double[] tmpRow = new double[width];
-                    double tmp = 1 / -S[i, row]; // store scale to revert later
+                    double[] tmpRow = new double[width]; // place holder for scaled row
+                    // double tmp = 1 / -S[i, row]; // store scale to revert later
                     // ScaleRow(S, row, -S[i, row]); // coefficient of rows above / below 
                     for (int j = 0; j < width; j++){
                         tmpRow[j] = S[row, j] * -S[i, row]; // copy and scale row
@@ -137,6 +137,10 @@ namespace Practical_Task_4 {
                 solution[i] = S[i, width - 1]; // constant column
             }
 
+            
+            Console.WriteLine("Solved Matrix: ");
+            PrintMatrix(S); // debug print
+
             return solution;
         }
 
@@ -150,9 +154,12 @@ namespace Practical_Task_4 {
         }
 
         public static void Main(string[] args) {
-            double[,] augmentedMatrix = new double[,] {
-                { 1, 1, 2 },
-                { 2, 2, 4 }
+            double[,] augmentedMatrix = new double[,]  {
+                { 2,  3, -1,  4,  2,  7  },
+                { 5, -2,  3, -1,  1, 34 },
+                { 4,  1,  2,  3, -1, 27 },
+                { 1, -3,  4,  2,  5, 36 },
+                { 6,  2,  1, -1,  3, 35 }
             };
 
             Console.WriteLine("Matrix: ");
