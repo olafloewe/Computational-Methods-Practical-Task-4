@@ -20,13 +20,15 @@ namespace Practical_Task_4 {
         // Swaps rows of a matrix in memory reference
         public static void SwapRows(double[,] S, int target, int destination){
             // guard clause
-            if (target > S.GetLength(0) || destination > S.GetLength(0) || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
 
-            int width = S.GetLength(1);
-            double[] tmp = new double[width];
+            Console.WriteLine($"width: {S.GetLength(1)} height: {S.GetLength(0)}");
+            if (target >= S.GetLength(0) || destination >= S.GetLength(0) || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
+            // int width = S.GetLength(1);
+            int height = S.GetLength(0);
+            double[] tmp = new double[height];
 
             // swap rows
-            for (int i = 0; i < width; i++) {
+            for (int i = 0; i < height; i++) {
                 tmp[i] = S[destination, i]; // evacuate destination row
                 S[destination, i] = S[target, i]; // write target row
                 S[target, i] = tmp[i]; // save destination row
@@ -38,7 +40,6 @@ namespace Practical_Task_4 {
             // guard clause
             if (target > S.GetLength(0) || target < 0 ) throw new IndexOutOfRangeException("Row index out of range.");
             if(factor == double.NaN || double.IsInfinity(factor)) throw new ArgumentException("Scale must be a valid number.");
-
             int width = S.GetLength(1);
 
             // scale row by a factor
@@ -51,7 +52,6 @@ namespace Practical_Task_4 {
         public static void AddRows(double[,] S, int target, int addition){
             // guard clause
             if (target > S.GetLength(0) || addition > S.GetLength(0) || target < 0 || addition < 0) throw new IndexOutOfRangeException("Row index out of range.");
-            
             int width = S.GetLength(1);
 
             // add rows
@@ -98,25 +98,28 @@ namespace Practical_Task_4 {
                 // row echelon form
                 if (S[row,row] == 0) RowEchelonForm(S);
 
+                
                 Console.WriteLine($"Pre {row}:");
                 PrintMatrix(S);
+                
 
-                // eliminate below and above
                 ScaleRow(S, row, 1 / S[row, row]); // scale to one
 
                 // ScaleRow(S, row, -1); // scale to negative coefficient
                 for(int i = 0; i < height; i++){
                     if (i == row) continue; // dont eliminate self
-                    double tmp = 1/-S[i, row];
-                    Console.WriteLine($"Eliminating row {i} using row {row} with scale tmp {tmp}");
-                    ScaleRow(S, row, -S[i, row]);
-                    AddRows(S, i, row);
+                    Console.WriteLine($"Eliminating row {i} using row {row} with scale tmp {-S[i, row]}");
+                    double tmp = 1 / -S[i, row]; // store scale to revert later
+                    ScaleRow(S, row, -S[i, row]); // coefficient of rows above / below 
+                    AddRows(S, i, row); // eliminate above / below
                     ScaleRow(S, row, tmp); // scale back
+                    PrintMatrix(S);
                 }
-
+                
                 Console.WriteLine($"Post {row}:");
                 PrintMatrix(S);
                 Console.WriteLine();
+                
 
                 row++;
             } while (row < limit);
@@ -133,10 +136,11 @@ namespace Practical_Task_4 {
             // width = GetLength(1)
 
             double[,] augmentedMatrix = new double[,] {
-                { 1, 1, 1, 6 },
-                { 2, -1, 1, 3 },
-                { 1, 2, -1, 2 }
-            };
+    {  1,  1,  1,  1, 10 },
+    {  2, -1,  3,  1, 17 },
+    { -3,  4, -1,  2, -2 },
+    {  1,  2,  5, -1, 13 }
+};
 
             Console.WriteLine("Matrix");
             PrintMatrix(augmentedMatrix);
