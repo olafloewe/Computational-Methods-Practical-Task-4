@@ -197,7 +197,7 @@ namespace Practical_Task_4{
             }
 
             Console.WriteLine("Solved Matrix: ");
-            PrintMatrix(S); // debug print
+            PrintMatrix(S);
 
             return solution;
         }
