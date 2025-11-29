@@ -5,60 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Practical_Task_4 {
-
-
-    //  made this..... no idea how to make it work in a 2d array and go back and forth between double and this ¯\_(ツ)_/¯
-    
-    /*
-    // fraction class to increase precision and get rid of rounding errors
-    internal class Fraction{
-        private int numerator;
-        private int denominator;
-        public Fraction(int numerator, int denominator){
-            if (denominator == 0) throw new DivideByZeroException("Denominator cannot be zero.");
-            this.numerator = numerator;
-            this.denominator = denominator;
-        }
-
-        // single operand plus
-        public static Fraction operator +(Fraction a){
-            return a;
-        }
-
-        // single operand minus
-        public static Fraction operator -(Fraction a){
-            return -a;
-        }
-
-        // double operand plus
-        public static Fraction operator +(Fraction a, Fraction b){
-            return new Fraction((a.numerator * b.denominator) + (b.numerator * a.denominator), a.denominator * b.denominator);
-        }
-
-        // double operand minus
-        public static Fraction operator -(Fraction a, Fraction b){
-            return a + (-b);
-        }
-
-        // double operand multiply
-        public static Fraction operator *(Fraction a, Fraction b){
-            return new Fraction(a.numerator * b.numerator, a.denominator * b.denominator);
-        }
-
-        // double operand division
-        public static Fraction operator /(Fraction a, Fraction b){
-            if (b.numerator == 0) throw new DivideByZeroException("Cannot divide by zero fraction.");
-            return new Fraction(a.numerator * b.denominator, b.numerator * a.denominator);
-        }
-
-        // override default ToString method
-        public override string ToString(){
-            return $"{numerator}/{denominator}";
-        }
-    }
-    */
-
-
     internal class Program {
 
         // Prints the matrix to the console
@@ -171,7 +117,6 @@ namespace Practical_Task_4 {
                 for(int i = 0; i < height; i++){
                     if (i == row) continue; // dont eliminate self
                     if (S[i, row] == 0) continue; // skip zero coefficients
-                    // Console.WriteLine($"Eliminating row {i} using row {row} with scale tmp {-S[i, row]}");
                     double[] tmpRow = new double[width];
 
                     double tmp = 1 / -S[i, row]; // store scale to revert later
@@ -224,4 +169,55 @@ namespace Practical_Task_4 {
             Console.ReadKey();
         }  
     }
+
+    //  made this..... no idea how to make it work in a 2d array and go back and forth between double and this ¯\_(ツ)_/¯
+
+    /*
+    // fraction class to increase precision and get rid of rounding errors
+    internal class Fraction{
+        private int numerator;
+        private int denominator;
+        public Fraction(int numerator, int denominator){
+            if (denominator == 0) throw new DivideByZeroException("Denominator cannot be zero.");
+            this.numerator = numerator;
+            this.denominator = denominator;
+        }
+
+        // single operand plus
+        public static Fraction operator +(Fraction a){
+            return a;
+        }
+
+        // single operand minus
+        public static Fraction operator -(Fraction a){
+            return -a;
+        }
+
+        // double operand plus
+        public static Fraction operator +(Fraction a, Fraction b){
+            return new Fraction((a.numerator * b.denominator) + (b.numerator * a.denominator), a.denominator * b.denominator);
+        }
+
+        // double operand minus
+        public static Fraction operator -(Fraction a, Fraction b){
+            return a + (-b);
+        }
+
+        // double operand multiply
+        public static Fraction operator *(Fraction a, Fraction b){
+            return new Fraction(a.numerator * b.numerator, a.denominator * b.denominator);
+        }
+
+        // double operand division
+        public static Fraction operator /(Fraction a, Fraction b){
+            if (b.numerator == 0) throw new DivideByZeroException("Cannot divide by zero fraction.");
+            return new Fraction(a.numerator * b.denominator, b.numerator * a.denominator);
+        }
+
+        // override default ToString method
+        public override string ToString(){
+            return $"{numerator}/{denominator}";
+        }
+    }
+    */
 }
