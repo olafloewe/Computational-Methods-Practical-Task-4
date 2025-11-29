@@ -22,11 +22,12 @@ namespace Practical_Task_4{
         public static void SwapRows(double[,] S, int target, int destination){
             // guard clause
             int height = S.GetLength(0);
+            int width = S.GetLength(1);
             if (target >= height || destination >= height || target < 0 || destination < 0) throw new IndexOutOfRangeException("Row index out of range.");
-            double[] tmp = new double[height];
+            double[] tmp = new double[width];
 
             // swap rows
-            for (int i = 0; i < height; i++){
+            for (int i = 0; i < width; i++){
                 tmp[i] = S[destination, i]; // evacuate destination row
                 S[destination, i] = S[target, i]; // write target row
                 S[target, i] = tmp[i]; // save destination row
@@ -75,11 +76,11 @@ namespace Practical_Task_4{
         }
 
         // sorts the matrix into row echelon form
-        public static void RowEchelonForm(double[,] S){
+        public static void RowEchelonForm(double[,] S, int current){
             // int row = 0;
             int height = S.GetLength(0);
-            int index = 1;
-            for (int row = 0; row < height; row++){
+            int index = current+1;
+            for (int row = current; row < height; row++){
 
                 while (S[row, row] == 0 && index < height) {
                     Console.WriteLine($"Swapping row {row} with row {index} to avoid zero pivot.");
@@ -147,7 +148,7 @@ namespace Practical_Task_4{
 
             while (row < height && row < width - 1){
                 // row echelon form
-                if (S[row, row] == 0) RowEchelonForm(S);
+                if (S[row, row] == 0) RowEchelonForm(S, row);
 
                 Console.WriteLine($"Pre {row}:");
                 PrintMatrix(S);
@@ -223,12 +224,11 @@ namespace Practical_Task_4{
         }
 
         public static void Main(string[] args){
-            double[,] augmentedMatrix = new double[,] { 
-                { 1, 3, 5 },
-                { 3, -2, 4 }, 
-                { 4, 1, 9 },
-                { 7, -3, 11 },
-                { 11, -2, 20 }
+            double[,] augmentedMatrix = new double[,] {
+                { 1,  2, -1,  1,  1 },
+                { 2, -1,  3,  2, 22 },
+                { 3,  1,  2, -1,  7 },
+                { 4, -2,  1,  3, 25 }
             };
 
             Console.WriteLine("Matrix: ");
@@ -236,7 +236,7 @@ namespace Practical_Task_4{
 
             // solve system
             PrintSolution(SystemSolve(augmentedMatrix));
-
+            
             // HOLD THE LINE (CMD prompt) !!!
             Console.ReadKey();
         }
