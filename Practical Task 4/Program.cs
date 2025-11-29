@@ -36,10 +36,12 @@ namespace Practical_Task_4{
         // Scales row of a matrix in memory reference
         public static void ScaleRow(double[,] S, int target, double factor){
             // guard clause
-            if (target > S.GetLength(0) || target < 0) throw new IndexOutOfRangeException("Row index out of range.");
-            if (factor == double.NaN || double.IsInfinity(factor)) throw new ArgumentException("Scale must be a valid number.");
-            int width = S.GetLength(1);
 
+            int height = S.GetLength(0);
+            int width = S.GetLength(1);
+            if (target >= height || target < 0) throw new IndexOutOfRangeException("Row index out of range.");
+            if (factor == double.NaN || double.IsInfinity(factor)) throw new ArgumentException("Scale must be a valid number.");
+            
             // scale row by a factor
             for (int i = 0; i < width; i++){
                 S[target, i] *= (double)factor; // scaled element
@@ -50,7 +52,8 @@ namespace Practical_Task_4{
         public static void AddRows(double[,] S, int target, int addition){
             // guard clause
             int width = S.GetLength(1);
-            if (target > width || addition > width || target < 0 || addition < 0) throw new IndexOutOfRangeException("Row index out of range.");
+            int height = S.GetLength(0);
+            if (target >= height || addition >= height || target < 0 || addition < 0) throw new IndexOutOfRangeException("Row index out of range.");
 
             // add rows
             for (int i = 0; i < width; i++){
@@ -62,7 +65,8 @@ namespace Practical_Task_4{
         public static void AddRows(double[,] S, int target, double[] addition){
             // guard clause
             int width = S.GetLength(1);
-            if (target > width || target < 0 || addition.Length != width) throw new IndexOutOfRangeException("Row index out of range.");
+            int height = S.GetLength(0);
+            if (target >= height || target < 0 || addition.Length != width) throw new IndexOutOfRangeException("Row index out of range.");
 
             // add rows
             for (int i = 0; i < width; i++){
@@ -219,12 +223,12 @@ namespace Practical_Task_4{
         }
 
         public static void Main(string[] args){
-            double[,] augmentedMatrix = new double[,] {
-                { 2,  3, -1, 2,  7  },
-                { 5, -2,  3, 1, 34 },
-                { 4,  1,  2, -1, 27 },
-                { 1, -3,  4,  2, 36 },
-                { 6,  2,  1, -1,  3}
+            double[,] augmentedMatrix = new double[,] { 
+                { 1, 3, 5 },
+                { 3, -2, 4 }, 
+                { 4, 1, 9 },
+                { 7, -3, 11 },
+                { 11, -2, 20 }
             };
 
             Console.WriteLine("Matrix: ");
