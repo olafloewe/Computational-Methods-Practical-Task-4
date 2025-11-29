@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Practical_Task_4 {
-    internal class Program {
+namespace Practical_Task_4{
+    internal class Program{
 
         // Prints the matrix to the console
         public static void PrintMatrix(double[,] S){
@@ -26,7 +26,7 @@ namespace Practical_Task_4 {
             double[] tmp = new double[height];
 
             // swap rows
-            for (int i = 0; i < height; i++) {
+            for (int i = 0; i < height; i++){
                 tmp[i] = S[destination, i]; // evacuate destination row
                 S[destination, i] = S[target, i]; // write target row
                 S[target, i] = tmp[i]; // save destination row
@@ -36,8 +36,8 @@ namespace Practical_Task_4 {
         // Scales row of a matrix in memory reference
         public static void ScaleRow(double[,] S, int target, double factor){
             // guard clause
-            if (target > S.GetLength(0) || target < 0 ) throw new IndexOutOfRangeException("Row index out of range.");
-            if(factor == double.NaN || double.IsInfinity(factor)) throw new ArgumentException("Scale must be a valid number.");
+            if (target > S.GetLength(0) || target < 0) throw new IndexOutOfRangeException("Row index out of range.");
+            if (factor == double.NaN || double.IsInfinity(factor)) throw new ArgumentException("Scale must be a valid number.");
             int width = S.GetLength(1);
 
             // scale row by a factor
@@ -54,7 +54,7 @@ namespace Practical_Task_4 {
 
             // add rows
             for (int i = 0; i < width; i++){
-                S[target, i] += S[addition,i]; // add element
+                S[target, i] += S[addition, i]; // add element
             }
         }
 
@@ -74,7 +74,7 @@ namespace Practical_Task_4 {
         public static void RowEchelonForm(double[,] S){
             // int row = 0;
             int index = 1;
-            for(int row = 0; row < S.GetLength(0); row++) {
+            for (int row = 0; row < S.GetLength(0); row++){
                 while (S[row, row] == 0) SwapRows(S, row, index++);
                 row++;
             }
@@ -99,35 +99,49 @@ namespace Practical_Task_4 {
             int width = S.GetLength(1);
 
             // fewer equations than variables => infinitely many solutions
-            if (width + 1 < height) return new double[0];
+            if (width > height + 1) return new double[0];
             int row = 0;
 
             do{
+                if (row == width - 1) return new double[0]; // no solution
                 // row echelon form
-                if (S[row,row] == 0) RowEchelonForm(S);
+                if (S[row, row] == 0) RowEchelonForm(S);
 
-                try { // TODO try 0
+                Console.WriteLine($"Pre {row}:");
+                PrintMatrix(S);
+                Console.WriteLine();
+
+                try{
                     ScaleRow(S, row, 1 / S[row, row]); // scale to one
                 }
                 catch (Exception e){
                     return new double[0]; // no solution
                 }
-                
+
                 // ScaleRow(S, row, -1); // scale to negative coefficient
-                for(int i = 0; i < height; i++){
+                for (int i = 0; i < height; i++){
                     if (i == row) continue; // dont eliminate self
                     if (S[i, row] == 0) continue; // skip zero coefficients
 
+                    Console.WriteLine($"Eliminating row {i} using row {row} with scale tmp {-S[i, row]}");
+
                     double[] tmpRow = new double[width]; // place holder for scaled row
-                    // double tmp = 1 / -S[i, row]; // store scale to revert later
-                    // ScaleRow(S, row, -S[i, row]); // coefficient of rows above / below 
                     for (int j = 0; j < width; j++){
                         tmpRow[j] = S[row, j] * -S[i, row]; // copy and scale row
                     }
-                    AddRows(S, i, tmpRow); // eliminate above / below
-                    // ScaleRow(S, row, tmp); // scale back
+                    try{ 
+                        AddRows(S, i, tmpRow); // eliminate above / below
+                    }
+                    catch (Exception e){
+                        return new double[0]; // no solution
+                    }
+                    
+
+                    Console.WriteLine($"Post {row}:");
+                    PrintMatrix(S);
+                    Console.WriteLine();
                 }
-                
+
                 row++;
             } while (row < height);
 
@@ -137,7 +151,7 @@ namespace Practical_Task_4 {
                 solution[i] = S[i, width - 1]; // constant column
             }
 
-            
+
             Console.WriteLine("Solved Matrix: ");
             PrintMatrix(S); // debug print
 
@@ -147,19 +161,19 @@ namespace Practical_Task_4 {
         private static void PrintSolution(double[] solution){
             // print array solution with formating
             Console.Write("Solution:\n{ ");
-            for (int i = 0; i < solution.Length; i++){
+            for (int i = 0; i < solution.Length; i++)
+            {
                 Console.Write($"x{i}={solution[i]}, ");
             }
             Console.WriteLine("}");
         }
 
-        public static void Main(string[] args) {
-            double[,] augmentedMatrix = new double[,]  {
-                { 2,  3, -1,  4,  2,  7  },
-                { 5, -2,  3, -1,  1, 34 },
-                { 4,  1,  2,  3, -1, 27 },
-                { 1, -3,  4,  2,  5, 36 },
-                { 6,  2,  1, -1,  3, 35 }
+        public static void Main(string[] args){
+            double[,] augmentedMatrix = new double[,]{
+                {1, 3, 5}, 
+                {3, -2, 4}, 
+                {4, 1, 9}, 
+                {7, -3, 11}
             };
 
             Console.WriteLine("Matrix: ");
@@ -170,7 +184,7 @@ namespace Practical_Task_4 {
 
             // HOLD THE LINE (CMD prompt) !!!
             Console.ReadKey();
-        }  
+        }
     }
 
     //  made this..... no idea how to make it work in a 2d array and go back and forth between double and this ¯\_(ツ)_/¯
