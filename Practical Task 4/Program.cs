@@ -83,11 +83,9 @@ namespace Practical_Task_4{
             for (int row = current; row < height; row++){
 
                 while (S[row, row] == 0 && index < height) {
-                    Console.WriteLine($"Swapping row {row} with row {index} to avoid zero pivot.");
                     SwapRows(S, row, index);
                     index++;
                 }
-                // row++;
             }
         }
 
@@ -150,11 +148,8 @@ namespace Practical_Task_4{
                 // row echelon form
                 if (S[row, row] == 0) RowEchelonForm(S, row);
 
-                Console.WriteLine($"Pre {row}:");
-                PrintMatrix(S);
-                Console.WriteLine();
-
                 try{
+                    // Console.WriteLine($"Scaling row {row} by factor {S[row, row]}");
                     ScaleRow(S, row, 1 / S[row, row]); // scale to one
                 }
                 catch (Exception e){
@@ -165,8 +160,6 @@ namespace Practical_Task_4{
                 for (int i = 0; i < height; i++){
                     if (i == row) continue; // dont eliminate self
                     if (S[i, row] == 0) continue; // skip zero coefficients
-
-                    Console.WriteLine($"Eliminating row {i} using row {row} with scale tmp {-S[i, row]}");
 
                     double[] tmpRow = new double[width]; // place holder for scaled row
                     for (int j = 0; j < width; j++){
@@ -180,10 +173,6 @@ namespace Practical_Task_4{
                         Console.WriteLine(e.Message);
                         return new double[0]; // no solution
                     }
-
-                    Console.WriteLine($"Post {row}:");
-                    PrintMatrix(S);
-                    Console.WriteLine();
                 }
                 row++;
             }
@@ -216,8 +205,7 @@ namespace Practical_Task_4{
         private static void PrintSolution(double[] solution){
             // print array solution with formating
             Console.Write("Solution:\n{ ");
-            for (int i = 0; i < solution.Length; i++)
-            {
+            for (int i = 0; i < solution.Length; i++){
                 Console.Write($"x{i+1}={solution[i]}, ");
             }
             Console.WriteLine("}");
