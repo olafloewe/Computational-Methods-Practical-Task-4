@@ -117,19 +117,15 @@ namespace Practical_Task_4 {
                 for(int i = 0; i < height; i++){
                     if (i == row) continue; // dont eliminate self
                     if (S[i, row] == 0) continue; // skip zero coefficients
-                    double[] tmpRow = new double[width];
 
+                    double[] tmpRow = new double[width];
                     double tmp = 1 / -S[i, row]; // store scale to revert later
                     // ScaleRow(S, row, -S[i, row]); // coefficient of rows above / below 
-
                     for (int j = 0; j < width; j++){
                         tmpRow[j] = S[row, j] * -S[i, row]; // copy and scale row
                     }
-
                     AddRows(S, i, tmpRow); // eliminate above / below
                     // ScaleRow(S, row, tmp); // scale back
-
-                    // PrintMatrix(S);
                 }
                 
                 row++;
