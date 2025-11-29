@@ -101,19 +101,17 @@ namespace Practical_Task_4 {
                 Console.WriteLine($"Pre {row}:");
                 PrintMatrix(S);
 
-                // scale to 1
-                // ScaleRow(S, row, 1 / S[row, row]);
-                
                 // eliminate below and above
-                for(int i = 0; i < limit; i++){
-                    if (S[row, i] == 0 || i == row) continue; // no need to eliminate
-                    ScaleRow(S, row, S[row, i]); // scale to negative coefficient
+                ScaleRow(S, row, 1 / S[row, row]); // scale to one
 
-                    ScaleRow(S, row, -1); // scale to negative coefficient
-                    AddRows(S, i, row); // add to eliminate
-
-                    ScaleRow(S, row, -1); // scale to negative coefficient
-                    ScaleRow(S, row, (double)1 / S[row, i]); // scale back
+                // ScaleRow(S, row, -1); // scale to negative coefficient
+                for(int i = 0; i < height; i++){
+                    if (i == row) continue; // dont eliminate self
+                    double tmp = 1/-S[i, row];
+                    Console.WriteLine($"Eliminating row {i} using row {row} with scale tmp {tmp}");
+                    ScaleRow(S, row, -S[i, row]);
+                    AddRows(S, i, row);
+                    ScaleRow(S, row, tmp); // scale back
                 }
 
                 Console.WriteLine($"Post {row}:");
